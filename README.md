@@ -73,19 +73,3 @@ Express.js
 File Upload Middleware
 Models
 PostsModel
-The PostsModel class is responsible for managing posts.
-
-Properties
-
-id: Unique identifier for the post.
-userId: ID of the user who created the post.
-caption: Caption of the post.
-imageUrl: URL of the post image.
-Methods
-
-addPost(userId, caption, imageUrl): Add a new post.
-getPosts(): Retrieve all posts.
-getPosts(postId): Retrieve a specific post by ID.
-getPostsByUserId(userId): Retrieve posts by a specific user.
-deletePost(userId, postId): Delete a specific post.
-updatePost(postId, userId, caption, filename): Update a specific post.
