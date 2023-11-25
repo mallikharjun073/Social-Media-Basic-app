@@ -1,4 +1,4 @@
-#Social Media API
+# Social Media API
 The Social Media API is a RESTful API designed for managing posts, comments, and likes. It provides endpoints to interact with posts, including creating, updating, deleting, and retrieving posts. Additionally, the API supports commenting on posts and liking posts.
 
 Endpoints
