@@ -1,0 +1,34 @@
+{
+  "name": "socialmediaapp",
+  "version": "1.0.0",
+  "description": "A Sample Social media app to upload a image and inteact with likes and book marks",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mallikharjunataapthi/SocialMediaApp.git"
+  },
+  "keywords": [
+    "SocialMediaApp"
+  ],
+  "author": "Mallikharjun",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mallikharjunataapthi/SocialMediaApp/issues"
+  },
+  "homepage": "https://github.com/Mallikharjunataapthi/SocialMediaApp#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "express": "^4.18.2",
+    "express-jwt": "^8.4.1",
+    "multer": "^1.4.5-lts.1",
+    "swagger-ui-express": "^5.0.0",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "type": "module"
+}

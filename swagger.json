@@ -1,0 +1,580 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Sample API",
+      "description": "Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.",
+      "version": "0.1.9"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3100/",
+        "description": "Main (production) server"
+      },
+      {
+        "url": "http://localhost:3100/",
+        "description": "Internal staging server for testing"
+      }
+    ],
+    "tags": [
+        {
+          "name": "Posts",
+          "description": "APIs related to posts"
+        },
+        {
+          "name": "Comments",
+          "description": "APIs related to comments"
+        },
+        {
+          "name": "Likes",
+          "description": "APIs related to likes"
+        }
+      ],
+    "paths": {
+      "/api/signup": {
+        "post": {
+            "tags": ["User"],
+          "summary": "Create a new user.",
+          "description": "Endpoint to sign up a new user.",
+          "requestBody": {
+            "description": "User signup data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email"
+                    },
+                    "password": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["name", "email", "password"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "User created successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string",
+                        "format": "email"
+                      }
+                    },
+                    "required": ["id", "name", "email"]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/signin": {
+        
+        "post": {
+          "tags": ["User"],
+          "summary": "User signin.",
+          "description": "Endpoint for user signin.",
+          "requestBody": {
+            "description": "User signin data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "format": "email"
+                    },
+                    "password": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["email", "password"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "User signin successful",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string",
+                        "format": "email"
+                      }
+                    },
+                    "required": ["id", "name", "email"]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/comments/{id}": {
+        "get": {
+            "tags": ["Comments"],
+          "summary": "Get comment by ID",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "Post id",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Comment"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+            "tags": ["Comments"],
+          "summary": "Create a new comment on a post",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "Post id",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "requestBody": {
+            "description": "Comment data",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewComment"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Comment created successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Comment"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+            "tags": ["Comments"],
+          "summary": "Delete a comment by ID",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "Comment Id",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Comment deleted successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Comment"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put": {
+            "tags": ["Comments"],
+          "summary": "Update a comment by ID",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "Comment id",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "requestBody": {
+            "description": "Updated comment data",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateComment"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Comment updated successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Comment"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/likes/{postId}": {
+        "get": {
+            "tags": ["Likes"],
+          "summary": "Get likes for a post by ID",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "postId",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Like"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/likes/toggle/{postId}": {
+        "get": {
+            "tags": ["Likes"],
+          "summary": "Toggle like for a post by ID",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "postId",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Like toggled successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Like"
+                  }
+                }
+              }
+            }
+          }
+        }
+     },
+     "/posts/all": {
+        "get": {
+            "tags": ["Posts"],
+          "summary": "Get all posts",
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Post"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/posts/{id}": {
+        "get": {
+            "tags": ["Posts"],
+          "summary": "Get post by ID",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Post"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+            "tags": ["Posts"],
+            "summary": "Delete post by ID",
+            "parameters": [
+              {
+                "in": "path",
+                "name": "id",
+                "required": true,
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "Post deleted successfully",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/Post"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "put": {
+            "tags": ["Posts"],
+            "summary": "Update post by ID",
+            "requestBody": {
+              "content": {
+                "multipart/form-data": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UpdatePost"
+                  }
+                }
+              }
+            },
+            "responses": {
+              "200": {
+                "description": "Post updated successfully",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "$ref": "#/components/schemas/Post"
+                    }
+                  }
+                }
+              }
+            }
+          }
+      },
+      "/posts": {
+        "get": {
+            "tags": ["Posts"],
+          "summary": "Get posts by user",
+          "responses": {
+            "200": {
+              "description": "Successful response",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Post"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+            "tags": ["Posts"],
+          "summary": "Add a new post",
+          "requestBody": {
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewPost"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Post added successfully",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Post"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+        "schemas": {
+            "Post": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "userId": {
+                    "type": "integer"
+                  },
+                  "caption": {
+                    "type": "string"
+                  },
+                  "imageUrl": {
+                    "type": "string"
+                  }
+                }
+              },
+              "NewPost": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "integer"
+                  },
+                  "caption": {
+                    "type": "string"
+                  },
+                  "imageUrl": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "UpdatePost": {
+                "type": "object",
+                "properties": {
+                  "caption": {
+                    "type": "string"
+                  },
+                  "imageUrl": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+            "Comment": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "userId": {
+                  "type": "integer"
+                },
+                "postId": {
+                  "type": "integer"
+                },
+                "content": {
+                  "type": "string"
+                }
+              }
+            },
+            "NewComment": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "integer"
+                },
+                "postId": {
+                  "type": "integer"
+                },
+                "content": {
+                  "type": "string"
+                }
+              }
+            },
+            "UpdateComment": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "type": "string"
+                }
+              }
+            },
+             "Like": {
+            "type": "object",
+            "properties": {
+                "id": {
+                "type": "integer"
+                },
+                "userId": {
+                "type": "integer"
+                },
+                "postId": {
+                "type": "integer"
+                }
+            }
+            }
+        },
+      "securitySchemes": {
+        "apiKey": {
+          "type": "apiKey",
+          "in": "header",
+          "name": "Authorization"
+        }
+      }
+    },
+    "security": [
+      {
+        "apiKey": []
+      }
+    ]
+  }
+  
